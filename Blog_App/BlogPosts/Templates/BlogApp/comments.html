@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Comments</title>
+</head>
+<body>
+<h2>Add Your Comments Here</h2>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Add Comment</button>
+    </form>
+<ul>
+        {% for comment in post.comments_made.all %}
+            <li>
+                <strong>User: {{ comment.user }}</strong>
+                <p>Description: {{ comment.description }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+

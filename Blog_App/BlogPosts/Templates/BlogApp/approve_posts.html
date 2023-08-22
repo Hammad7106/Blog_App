@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Pending Posts Approval</h2>
+  <ul>
+    {% for post in pending_posts %}
+      <li>
+        {{ post.post_title }}
+        <form method="post" action="{% url 'approve_posts' %}">
+          {% csrf_token %}
+          <input type="hidden" name="post_id" value="{{ post.id }}">
+          <button type="submit">Approve</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+</body>
+</html>

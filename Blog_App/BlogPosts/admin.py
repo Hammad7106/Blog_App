@@ -7,23 +7,23 @@ from .models import  UserProfile,Post, Comments, Like, Report, Suggestion
 
 @admin.register(UserProfile)
 class BlogUser(admin.ModelAdmin):
-    list_display = ('role','user', 'name','image','email')
+    list_display = ('role','user','image')
 
 @admin.register(Post)
 class BlogPostAdmin(admin.ModelAdmin):
-    list_display = ('user', 'post_title', 'post_description', 'get_likes_count', 'get_reports_count')
+    list_display = ('user', 'post_title', 'post_content','post_image','approved')
 
-    def get_likes_count(self, obj):
-        return obj.liked_by.count()
-    get_likes_count.short_description = 'Likes'
-
-    def get_reports_count(self, obj):
-        return obj.reported_by.count()
-    get_reports_count.short_description = 'Reports'
+    # def get_likes_count(self, obj):
+    #     return obj.liked_by.count()
+    # get_likes_count.short_description = 'Likes'
+    #
+    # def get_reports_count(self, obj):
+    #     return obj.reported_by.count()
+    # get_reports_count.short_description = 'Reports'
 
 @admin.register(Comments)
 class CommentsAdmin(admin.ModelAdmin):
-    list_display = ('user', 'post', 'description', 'get_likes_count', 'get_reports_count')
+    list_display = ('user', 'post', 'description')
 
     def get_likes_count(self, obj):
         return obj.liked_by.count()

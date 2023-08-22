@@ -1,0 +1,139 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post List</title>
+    <!-- Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+        <!-- Navbar content -->
+        <!-- ... -->
+    </nav>
+
+    <!-- Jumbotron -->
+    <div id="intro" class="p-5 text-center bg-light">
+        <h1 class="mb-0 h4">Welcome to My Blog</h1>
+    </div>
+
+    <!-- Main content -->
+    <main class="mt-4 mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mb-4">
+                    <!-- Post Loop -->
+                    {% if posts %}
+                        <ul class="list-unstyled">
+                            {% for post in posts %}
+                                <li class="mb-4">
+                                    {% if post.post_image %}
+                                        <img src="{{ post.post_image.url }}" alt="Post Image"
+                                             class="img-fluid rounded-5 shadow-sm mb-3">
+                                    {% endif %}
+                                    <div>
+                                        <h2>{{ post.post_title }}</h2>
+                                        <p>{{ post.post_content }}</p>
+
+                                        <button class="btn btn-primary like-button" data-post-id="{{ post.id }}">Like</button>
+                                        <span class="like-count ms-2">{{ post.like_count }}</span>
+
+                                       <div class="btn-group mt-2" role="group">-->
+                                                <a href="{% url 'update_post' post.id%}" class="btn btn-secondary">Update</a>
+
+                                            <form method="post" action="{% url 'delete_post' post.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger" color="grey">Delete</button>
+                                            </form>
+                                            </div>
+                                    </div>
+
+                                    <!-- Comments Loop -->
+                                    {% if not post.comments_made.all %}
+                                     <p>No Comments yet <a href="{% url 'add_comment' post.pk %}">Add Comments</a></p>
+                                     {% else %}
+                                      <a href="{% url 'add_comment' post.pk %}">Add Comments</a>
+                                       <ul class="list-unstyled">
+                                       {% for com in post.comments_made.all %}
+                                          <li>
+                                              <strong>User: {{ com.user }}</strong>
+                                              <p>Description: {{ com.description }}</p>
+                                          </li>
+                                        {% endfor %}
+                                        </ul>
+                                       {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No posts available.</p>
+                    {% endif %}
+                    <!-- End Post Loop -->
+                </div>
+                <!-- Grid column -->
+
+                <!-- Sidebar -->
+                <div class="col-md-4 mb-4">
+                    <!-- Sidebar content (if any) -->
+                </div>
+                <!-- Sidebar -->
+            </div>
+            <!-- Grid row -->
+        </div>
+    </main>
+    <!-- Main content -->
+
+    <!-- jQuery and Bootstrap JS scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.like-button').each(function() {
+            var postID = $(this).data('post-id');
+            var likeCountElement = $(this).siblings('.like-count');
+            var likeButton = $(this);
+
+            $.ajax({
+                url: `/check_like/${postID}/`, // Replace with the URL to check if user liked the post
+                method: 'GET',
+                success: function(response) {
+                    if (response.user_liked) {
+                        likeButton.text('Dislike');
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+
+            likeButton.on('click', function(event) {
+                event.preventDefault();
+
+                $.ajax({
+                    url: `/like/${postID}/`, // Replace with the correct 'LikeView' URL pattern
+                    method: 'POST',
+                    data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
+                    success: function(response) {
+                        likeCountElement.text(response.like_count);
+                        if (likeButton.text() === 'Like') {
+                            likeButton.text('Dislike');
+                        } else {
+                            likeButton.text('Like');
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
+</body>
+</html>
