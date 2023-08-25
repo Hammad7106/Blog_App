@@ -1,15 +1,55 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Posts</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/createpost.css' %}">
+    <link rel="stylesheet" href="{% static 'froala_editor/css/froala_editor.pkgd.min.css' %}">
+    <link rel="stylesheet" href="{% static 'froala_editor/css/froala_style.min.css' %}">
+    <style>
+
+    </style>
 </head>
 <body>
 
-    <form method="post" action="{% url 'post' %}" enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ postform.as_p }}
-      <button type="submit">Add Post</button>
-    </form>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="form-container">
+                <h1>Create Your Blog</h1>
+                <form method="post" action="{% url 'post' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="{{ form.post_title.id_for_label }}">Title</label>
+                        {{ form.post_title }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.post_image.id_for_label }}">Image</label>
+                        <input type="file" name="{{ form.post_image.name }}" id="{{ form.post_image.id_for_label }}">
+                        <!-- Add an element to display the Cloudinary image -->
+                        {% if form.instance.post_image %}
+                        <img src="{{ form.instance.post_image.url }}" alt="Post Image">
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.post_content.id_for_label }}">Content</label>
+                        {{ form.post_content }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Post</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.tiny.cloud/1/YOUR_API_KEY/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
 </body>
 </html>

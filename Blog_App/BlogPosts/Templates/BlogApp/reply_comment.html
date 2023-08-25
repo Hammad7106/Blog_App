@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reply to Comment</title>
+</head>
+<body>
+    <h1>Reply to Comment</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ comments.as_p }}
+        <button type="submit">Submit Reply</button>
+    </form>
+</body>
+</html>

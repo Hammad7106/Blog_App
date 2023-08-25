@@ -1,15 +1,31 @@
 
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Post List</title>
-    <!-- Bootstrap CSS link -->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+     <link rel="stylesheet" href="{% static 'css/post_lists.css' %}">
+<script src="{% static 'js/post_like.js' %}">
+
+</script>
+
+    <style>
+
+    </style>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
 </head>
 <body>
+
+
     <!-- Navbar -->
+
     <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
         <!-- Navbar content -->
         <!-- ... -->
@@ -17,7 +33,7 @@
 
     <!-- Jumbotron -->
     <div id="intro" class="p-5 text-center bg-light">
-        <h1 class="mb-0 h4">Welcome to My Blog</h1>
+        <h1 class="mb-0 h4">"Exploring Minds and Musings"</h1>
     </div>
 
     <!-- Main content -->
@@ -29,7 +45,7 @@
                     {% if posts %}
                         <ul class="list-unstyled">
                             {% for post in posts %}
-                                <li class="mb-4">
+                                <li class="mb-4 post-card">
                                     {% if post.post_image %}
                                         <img src="{{ post.post_image.url }}" alt="Post Image"
                                              class="img-fluid rounded-5 shadow-sm mb-3">
@@ -40,33 +56,75 @@
 
                                         <button class="btn btn-primary like-button" data-post-id="{{ post.id }}">Like</button>
                                         <span class="like-count ms-2">{{ post.like_count }}</span>
+                                          {% if request.user == post.user %}
+                                       <div class="btn-group mt-2 update-delete-buttons " role="group" style="float: right;">
+                                                <a href="{% url 'update_post' post.id%}" class="btn btn-secondary small-button">Update</a>
+                                                <a href="{% url 'delete_post' post.id%}" class="btn btn-danger small-button">delete</a>
 
-                                       <div class="btn-group mt-2" role="group">-->
-                                                <a href="{% url 'update_post' post.id%}" class="btn btn-secondary">Update</a>
-
-                                            <form method="post" action="{% url 'delete_post' post.id %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-danger" color="grey">Delete</button>
-                                            </form>
+                                       </div>
+                                                     <br>
+                                        <br>
+                                          {% endif %}
+                                              <!-- Suggestions Links -->
+                                            <div class="suggestion-links mt-2">
+                                                <a href="{% url 'submit_suggestion' post_id=post.id %}" class="btn btn-primary btn-sm">Submit Suggestion</a>
+                                                <a href="{% url 'suggestions_list' post_id=post.id %}" class="btn btn-secondary btn-sm">Check Suggestions</a>
                                             </div>
+
                                     </div>
 
                                     <!-- Comments Loop -->
-                                    {% if not post.comments_made.all %}
-                                     <p>No Comments yet <a href="{% url 'add_comment' post.pk %}">Add Comments</a></p>
-                                     {% else %}
-                                      <a href="{% url 'add_comment' post.pk %}">Add Comments</a>
-                                       <ul class="list-unstyled">
-                                       {% for com in post.comments_made.all %}
-                                          <li>
-                                              <strong>User: {{ com.user }}</strong>
-                                              <p>Description: {{ com.description }}</p>
-                                          </li>
+                                    <ul>
+                                        <div class="comment-box">
+                                        {% for comment in post.comments %}
+                                         {% if comment.user.userprofile.image %}
+
+                                        <div class=" bg-light ">
+                                              <img src="{{ comment.user.userprofile.image.url }}" alt="Profile Image" class="rounded-image" width="50px">
+                                                   {% endif %}
+
+                                            <strong>{{ comment.user.username }}</strong>
+                                                    <br>
+                                                    {{ comment.description }}
+                                                    {% if comment.attachment %}
+                                                  <a href="{{ comment.attachment.url }}" target="_blank">Attachment File</a>
+                                                     {% endif %}
+<!--                                                   {{ comment.attachment }}-->
+                                            <a href="{% url 'reply_comment' comment.id %}" class="small-button">Reply</a>
+
+                                    {% if comment.parent_comment %}
+                                        <div class="comment-reply mt-2">
+<!--                                            <p class="mb-1">Reply to: {{ comment.parent_comment.user.username }}</p>-->
+                                            <p>{{ comment.parent_comment.description }}</p>
+                                        </div>
+
+                                    {% endif %}
+                                             <button class="like-comment-button" data-comment-id="{{ comment.id }}">Like</button>
+                                              <span class="like-count">0</span>
+
+
+                                            </div>
                                         {% endfor %}
-                                        </ul>
-                                       {% endif %}
-                                </li>
+                                        <a href="{% url 'add_comment' post.id%}" class="btn small-button">Add Comment</a>
+                                        </div>
+                                        {% if user.is_authenticated %}
+                                            <div class="report-section mt-3">
+                                                {% if user in post.reported_by.all %}
+                                                    <p class="already-reported">Already reported</p>
+                                                {% else %}
+                                                    <form method="post" action="{% url 'report_post' post_id=post.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="report-button">Report this post</button>
+                                                    </form>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+
+
+                                    </ul>
+
                             {% endfor %}
+                            </li>
                         </ul>
                     {% else %}
                         <p>No posts available.</p>
@@ -83,6 +141,7 @@
             </div>
             <!-- Grid row -->
         </div>
+
     </main>
     <!-- Main content -->
 
@@ -91,47 +150,40 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    $(document).ready(function() {
-        $('.like-button').each(function() {
-            var postID = $(this).data('post-id');
-            var likeCountElement = $(this).siblings('.like-count');
-            var likeButton = $(this);
+ $(document).ready(function() {
 
-            $.ajax({
-                url: `/check_like/${postID}/`, // Replace with the URL to check if user liked the post
-                method: 'GET',
-                success: function(response) {
-                    if (response.user_liked) {
-                        likeButton.text('Dislike');
-                    }
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            });
 
-            likeButton.on('click', function(event) {
-                event.preventDefault();
+    // Like a comment using AJAX
+    $('.like-comment-button').on('click', function() {
+        var commentId = $(this).data('comment-id');
+        var likeCountSpan = $(this).siblings('.like-count');
 
-                $.ajax({
-                    url: `/like/${postID}/`, // Replace with the correct 'LikeView' URL pattern
-                    method: 'POST',
-                    data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
-                    success: function(response) {
-                        likeCountElement.text(response.like_count);
-                        if (likeButton.text() === 'Like') {
-                            likeButton.text('Dislike');
-                        } else {
-                            likeButton.text('Like');
-                        }
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-            });
+        $.post(`/like_comment/${commentId}/`, function(data) {
+            if (data.error) {
+                alert(data.error);
+            } else if (data.success) {
+                alert(data.success);
+                // Update the like count
+                likeCountSpan.text(parseInt(likeCountSpan.text()) + 1);
+            }
         });
     });
+
+    // Check if the user has liked a comment (for each comment)
+    $('.comment').each(function() {
+        var commentId = $(this).data('comment-id');
+        var likeCountSpan = $(this).find('.like-count');
+
+        $.get(`/check_comment_like/${commentId}/`, function(data) {
+            if (data.user_liked) {
+                // Mark the comment as liked and update the like count
+                likeCountSpan.text(parseInt(likeCountSpan.text()) + 1);
+                $(`.like-comment-button[data-comment-id="${commentId}"]`).addClass('liked');
+            }
+        });
+    });
+});
+
 </script>
 
 

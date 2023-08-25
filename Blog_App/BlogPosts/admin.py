@@ -3,7 +3,7 @@ from .models import Post,Comments,Like,Report,Suggestion
 # Register your models here.
 
 from django.contrib import admin
-from .models import  UserProfile,Post, Comments, Like, Report, Suggestion
+from .models import  UserProfile,Post, Comments, Like, Report, Suggestion,CommentLike,SuggestionReply
 
 @admin.register(UserProfile)
 class BlogUser(admin.ModelAdmin):
@@ -23,7 +23,7 @@ class BlogPostAdmin(admin.ModelAdmin):
 
 @admin.register(Comments)
 class CommentsAdmin(admin.ModelAdmin):
-    list_display = ('user', 'post', 'description')
+    list_display = ('user', 'post', 'description','attachment','parent_comment')
 
     def get_likes_count(self, obj):
         return obj.liked_by.count()
@@ -32,6 +32,12 @@ class CommentsAdmin(admin.ModelAdmin):
     def get_reports_count(self, obj):
         return obj.reported_by.count()
     get_reports_count.short_description = 'Reports'
+
+@admin.register(CommentLike)
+class LikeComment(admin.ModelAdmin):
+    list_display = ('user','comment')
+
+
 
 @admin.register(Like)
 class LikeAdmin(admin.ModelAdmin):
@@ -43,5 +49,8 @@ class ReportAdmin(admin.ModelAdmin):
 
 @admin.register(Suggestion)
 class SuggestionAdmin(admin.ModelAdmin):
-    list_display = ('user','post','content','reply','status')
+    list_display = ('user','post','text','status')
 
+@admin.register(SuggestionReply)
+class ReplySuggestion(admin.ModelAdmin):
+    list_display = ('suggestion','user','reply_text')

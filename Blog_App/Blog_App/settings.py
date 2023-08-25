@@ -42,7 +42,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'froala_editor',
     'BlogPosts',
+    'axes',
+    'cloudinary_storage',
+    'cloudinary',
+    # 'tinymce',
+
 ]
+# TINYMCE_DEFAULT_CONFIG = {
+#     'height': 400,
+#     'width': '100%',
+#     'plugins': 'advlist autolink lists link image charmap print preview anchor',
+#     'toolbar': 'undo redo | styleselect | bold italic | link image',
+# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -53,6 +64,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dwq7hvwd0',
+    'API_KEY': '259771577473719',
+    'API_SECRET': '2O71MJDE6SUuUP9jjLdLgiUbSP4'
+}
 
 ROOT_URLCONF = 'Blog_App.urls'
 
@@ -131,11 +148,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 import os
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL = '/static/'
-# STATICFILES_DIRS=(os.path.join(BASE_DIR,'static'),)
+STATIC_URL = 'static/'
+STATICFILES_DIRS=(os.path.join(BASE_DIR,'static'),)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/images')
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 
@@ -144,3 +162,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/images')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AXES_LOGIN_FAILURE_LIMIT = 3
+AXES_COOLOFF_TIME = 60
