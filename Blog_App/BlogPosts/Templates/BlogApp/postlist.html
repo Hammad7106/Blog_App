@@ -10,18 +10,27 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
      <link rel="stylesheet" href="{% static 'css/post_lists.css' %}">
-<script src="{% static 'js/post_like.js' %}">
+     <script src="{% static 'js/post_like.js' %}">
 
-</script>
+     </script>
 
     <style>
-
+        .navbar-text {
+        margin-left:600px;
+    font-style: italic;
+    font-weight: bold;
+}
+.like-comments {
+    font-size: 12px;  /* Adjust the font size as needed */
+    padding: 4px 8px; /* Adjust padding to control button size */
+}
     </style>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
 </head>
 <body>
+
 
 
     <!-- Navbar -->
@@ -33,8 +42,31 @@
 
     <!-- Jumbotron -->
     <div id="intro" class="p-5 text-center bg-light">
-        <h1 class="mb-0 h4">"Exploring Minds and Musings"</h1>
+    <h1 class="mb-0 h4">"Exploring Minds and Musings"</h1>
+        <br>
+    <div class="buttons-container">
+        {% if not user.is_authenticated %}
+            <a href="{% url 'login' %}" class="btn btn-primary me-2">Login</a>
+            <a href="{% url 'Register' %}" class="btn btn-secondary me-2">SignUp</a>
+        {% else %}
+            {% if user.userprofile.role == 'moderator' %}
+                <a href="{% url 'approve_posts' %}" class="btn btn-success me-2">Approve Posts</a>
+                <a href="{% url 'moderator_dashboard' %}" class="btn btn-warning me-2">Check Reported Posts</a>
+                <a href="{% url 'logout' %}" class="btn btn-danger me-2">Logout</a>
+            {% else %}
+                <a href="{% url 'post' %}" class="btn btn-success me-2">Create Blog</a>
+                <a href="{% url 'list' %}" class="btn btn-info me-2">Blog List</a>
+                <a href="{% url 'logout' %}" class="btn btn-danger me-2">Logout</a>
+                <a href="{% url 'profile_update' %}" class="btn btn-success me-2">Edit Profile</a>
+            {% endif %}
+        </div>
+        <div class="welcome-user ml-auto">
+            <span class="navbar-text welcome-message">User: <span class="italic-bold">{{ user.username }}</span></span>
+        </div>
+        {% endif %}
     </div>
+</div>
+
 
     <!-- Main content -->
     <main class="mt-4 mb-5">
@@ -44,7 +76,7 @@
                     <!-- Post Loop -->
                     {% if posts %}
                         <ul class="list-unstyled">
-                            {% for post in posts %}
+                            {% for post in posts reversed %}
                                 <li class="mb-4 post-card">
                                     {% if post.post_image %}
                                         <img src="{{ post.post_image.url }}" alt="Post Image"
@@ -52,7 +84,7 @@
                                     {% endif %}
                                     <div>
                                         <h2>{{ post.post_title }}</h2>
-                                        <p>{{ post.post_content }}</p>
+                                        <p>{{ post.post_content|safe }}</p>
 
                                         <button class="btn btn-primary like-button" data-post-id="{{ post.id }}">Like</button>
                                         <span class="like-count ms-2">{{ post.like_count }}</span>
@@ -99,9 +131,29 @@
                                         </div>
 
                                     {% endif %}
-                                             <button class="like-comment-button" data-comment-id="{{ comment.id }}">Like</button>
-                                              <span class="like-count">0</span>
+                                                <div class="comment">
 
+                                                <button class="like-comments" data-comment-id="{{ comment.id }}">
+                                                    {% if request.user in comment.liked_by.all %}
+                                                        Unlike
+                                                    {% else %}
+                                                        Like
+                                                    {% endif %}
+                                                </button>
+                                                <span class="like-count">{{ comment.liked_by.count }}</span>
+                                            </div>
+<!--                                            {% if request.user in comment.liked_by.all %}-->
+<!--                                                <a href="{% url 'unlike_comment' comment.id %}">Unlike</a>-->
+<!--                                            {% else %}-->
+<!--                                                <a href="{% url 'like_comment' comment.id %}">Like</a>-->
+<!--                                            {% endif %}-->
+<!--                                            <p>Likes: {{ comment.liked_by.count }}</p>-->
+
+                                            {% if request.user in comment.reported_by.all %}
+                                                <a href="{% url 'unreport_comment' comment.id %}">Unreport</a>
+                                            {% else %}
+                                                <a href="{% url 'report_comment' comment.id %}">Report</a>
+                                            {% endif %}
 
                                             </div>
                                         {% endfor %}
@@ -145,46 +197,46 @@
     </main>
     <!-- Main content -->
 
+
     <!-- jQuery and Bootstrap JS scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
  $(document).ready(function() {
-
-
-    // Like a comment using AJAX
-    $('.like-comment-button').on('click', function() {
+    $('.like-comments').on('click', function() {
         var commentId = $(this).data('comment-id');
-        var likeCountSpan = $(this).siblings('.like-count');
+        var likeButton = $(this);
+        var likeCount = likeButton.siblings('.like-count');  // Select the like count span
 
-        $.post(`/like_comment/${commentId}/`, function(data) {
-            if (data.error) {
-                alert(data.error);
-            } else if (data.success) {
-                alert(data.success);
-                // Update the like count
-                likeCountSpan.text(parseInt(likeCountSpan.text()) + 1);
-            }
-        });
-    });
-
-    // Check if the user has liked a comment (for each comment)
-    $('.comment').each(function() {
-        var commentId = $(this).data('comment-id');
-        var likeCountSpan = $(this).find('.like-count');
-
-        $.get(`/check_comment_like/${commentId}/`, function(data) {
-            if (data.user_liked) {
-                // Mark the comment as liked and update the like count
-                likeCountSpan.text(parseInt(likeCountSpan.text()) + 1);
-                $(`.like-comment-button[data-comment-id="${commentId}"]`).addClass('liked');
+        $.ajax({
+            type: 'POST',
+            url: `/comment/${commentId}/like/`,
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    // Update button text based on action
+                    if (response.action === 'liked') {
+                        likeButton.text('Unlike');
+                    } else if (response.action === 'unliked') {
+                        likeButton.text('Like');
+                    }
+                    // Update like count
+                    likeCount.text(response.like_count);
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(xhr) {
+                alert('An error occurred. Please try again.');
             }
         });
     });
 });
-
 </script>
+
 
 
 </body>

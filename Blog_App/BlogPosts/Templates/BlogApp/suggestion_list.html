@@ -21,9 +21,17 @@
                     <a href="{% url 'delete_suggestion' suggestion_id=suggestion.id %}">Delete</a>
                     <a href="{% url 'apply_suggestion' suggestion_id=suggestion.id %}">Apply</a>
                 </div>
-                <div class="suggestion-text">Suggestion By : {{ suggestion.user.username }}</div>
+                <div class="suggestion-text">Suggestion By: {{ suggestion.user.username }}</div>
+                <div class="suggestion-replies">
+                    {% for reply in suggestion.suggestionreply_set.all %}
+                        <div class="reply">
+                            <strong>{{ reply.user.username }}:</strong> {{ reply.reply_text }}
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         {% endfor %}
     </div>
 </body>
+
 </html>

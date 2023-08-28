@@ -5,4 +5,4 @@ class SuggestionForm(forms.ModelForm):
     title = forms.CharField(max_length=30)
     class Meta:
         model = Suggestion
-        fields = ('text','title')
+        fields = ('title','text')

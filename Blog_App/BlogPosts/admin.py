@@ -13,25 +13,11 @@ class BlogUser(admin.ModelAdmin):
 class BlogPostAdmin(admin.ModelAdmin):
     list_display = ('user', 'post_title', 'post_content','post_image','approved')
 
-    # def get_likes_count(self, obj):
-    #     return obj.liked_by.count()
-    # get_likes_count.short_description = 'Likes'
-    #
-    # def get_reports_count(self, obj):
-    #     return obj.reported_by.count()
-    # get_reports_count.short_description = 'Reports'
 
 @admin.register(Comments)
 class CommentsAdmin(admin.ModelAdmin):
     list_display = ('user', 'post', 'description','attachment','parent_comment')
 
-    def get_likes_count(self, obj):
-        return obj.liked_by.count()
-    get_likes_count.short_description = 'Likes'
-
-    def get_reports_count(self, obj):
-        return obj.reported_by.count()
-    get_reports_count.short_description = 'Reports'
 
 @admin.register(CommentLike)
 class LikeComment(admin.ModelAdmin):

@@ -8,6 +8,11 @@
             padding: 5px 10px;
             font-size: 12px;
         }
+        .post-card {
+    margin-bottom: 20px; /* Add space between post cards */
+    /* Other existing styles for post cards */
+}
+
 
     /* Add styles for the comment section */
     .comment {
@@ -22,33 +27,34 @@
         font-weight: bold;
         margin-bottom: 10px;
     }
+    /* CSS for postlist.html styling */
+/* ... Existing CSS ... */
 
-<!--    /* Style for individual replies */-->
-<!--    .reply {-->
-<!--        margin-left: 20px;-->
-<!--        padding: 5px;-->
-<!--        border: 1px solid #ccc;-->
-<!--        background-color: #fff;-->
-<!--    }-->
+/* Style for the "Report" button */
+.report-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 12px;
+}
 
-<!--    /* Style for reply to parent comment */-->
-<!--    .reply-to-parent {-->
-<!--        margin-left: 40px; /* Increase the margin to indent more */-->
-<!--        padding: 5px;-->
-<!--        border: 1px solid #ccc;-->
-<!--        background-color: #f0f0f0;-->
-<!--    }-->
+/* Style for the "Delete" and "Update" buttons */
+.update-delete-buttons a {
+    background-color: red;
+    color: white;
+    margin-right: 5px;
+    padding: 5px 10px;
+    font-size: 12px;
+    text-decoration: none;
+}
 
-<!--    /* Style for user profile images */-->
-<!--    .rounded-image {-->
-<!--        width: 50px;-->
-<!--        height: 50px;-->
-<!--        border-radius: 50%;-->
-<!--        margin-right: 10px;-->
-<!--    }-->
-
-<!--    /* Style for reply button */-->
-<!--    .small-button {-->
-<!--        padding: 5px 10px;-->
-<!--        font-size: 12px;-->
-<!--    }-->
+/* Style for the "Submit Suggestions" button */
+.suggestion-links a.btn-primary {
+    background-color: #007bff;
+    color: white;
+    margin-right: 5px;
+    padding: 5px 10px;
+    font-size: 12px;
+    text-decoration: none;
+}

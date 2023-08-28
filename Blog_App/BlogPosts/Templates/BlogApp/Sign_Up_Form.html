@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -7,7 +8,6 @@
     <link rel="stylesheet" href="{% static 'css/signup.css' %}">
     <title>Sign Up</title>
     <style>
-
     </style>
 </head>
 <body>
@@ -27,12 +27,10 @@
             {{ signupform.password1 }}
             <label for="{{signupform.password2.id_for_label}}">Confirm Password:</label>
             {{ signupform.password2 }}
+            <!-- More form fields... -->
 
-<!--            <label for="{{userprofileform.image.id_for_label}}">Profile Image:</label>-->
-<!--            {{ userprofileform.image }}-->
             <label for="{{userprofileform.image.id_for_label}}">Profile Image:</label>
             <input type="file" name="{{userprofileform.image.name}}" id="{{userprofileform.image.id_for_label}}">
-            <!-- Add an element to display the Cloudinary image -->
             {% if userprofileform.instance.image %}
             <img src="{{ userprofileform.instance.image.url }}" alt="Profile Image">
             {% endif %}

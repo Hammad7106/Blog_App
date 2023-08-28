@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from enum import Enum
 from froala_editor.fields import FroalaField
-
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 
@@ -22,7 +22,8 @@ class UserProfile(models.Model):
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post_title = models.CharField(max_length=20)
-    post_content = models.TextField()
+    # post_content = models.TextField()
+    post_content=RichTextField(null=True,blank=True)
     post_image = models.ImageField(blank=True, null=True)
     liked_by = models.ManyToManyField(User, related_name='liked_posts', blank=True)
     reported_by = models.ManyToManyField(User, related_name='reported_posts', blank=True)

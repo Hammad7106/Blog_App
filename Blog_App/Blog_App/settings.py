@@ -34,26 +34,20 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'material',
+    'material.admin',
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'froala_editor',
     'BlogPosts',
-    'axes',
     'cloudinary_storage',
     'cloudinary',
-    # 'tinymce',
-
+    'ckeditor',
 ]
-# TINYMCE_DEFAULT_CONFIG = {
-#     'height': 400,
-#     'width': '100%',
-#     'plugins': 'advlist autolink lists link image charmap print preview anchor',
-#     'toolbar': 'undo redo | styleselect | bold italic | link image',
-# }
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -162,6 +156,3 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-AXES_LOGIN_FAILURE_LIMIT = 3
-AXES_COOLOFF_TIME = 60

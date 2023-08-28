@@ -1,5 +1,5 @@
 
-
+from ckeditor.widgets import CKEditorWidget
 
 from .models import Post
 from django import forms

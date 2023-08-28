@@ -1,22 +1,34 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title</title>
+    <title>Suggestion Form</title>
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/submit_suggestion.css' %}">
+
+    <!-- Custom CSS for the suggestion form -->
+    <style>
+
+    </style>
 </head>
 <body>
-<div class="container mt-5 text-center">
-
-    <h1 class="mb-4">{{suggestionform.title}}</h1>
+<div class="container">
+    <h1>Suggestion Form</h1>
     <form method="post">
         {% csrf_token %}
         <div class="form-group">
-            <label for="{{ suggestionform.text.id }}">{{ suggestionform.text_for_label }}</label>
-            {{ suggestionform.text}}
+            <label for="{{ suggestionform.title.id }}">{{ suggestionform.title.label_tag }}</label>
+            {{ suggestionform.title }}
         </div>
+
+        <div class="form-group">
+            <label for="{{ suggestionform.text.id }}">{{ suggestionform.text.label_tag }}</label>
+            {{ suggestionform.text | safe }}
+        </div>
+
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
