@@ -3,7 +3,7 @@ from . import views
 from .views import add_comment,apply_suggestion,approve_post,check_post_likes\
     ,create_post,dashboard,delete_post,delete_repo_post,delete_suggestion,delete_unapproved_posts,\
     login,logout,moderator_dashboard,post_list,post_like,reply_comment,reply_suggestion,report_post,signup,\
-    submit_suggestion,suggestion_list,update_post,update_profile,like_comments,report_comments,sending_mail
+    submit_suggestion,suggestion_list,update_post,update_profile,like_comments,report_comments
 
 urlpatterns = [
 
@@ -18,7 +18,6 @@ urlpatterns = [
 
     # Profile Update
     path('profile/update/', update_profile.profile_update, name='profile_update'),
-    path('mail/', sending_mail.mail, name='send_mail'),
     path('verify-email/<str:token>/', update_profile.verify_email_change, name='verify_email_change'),
 
 

@@ -44,7 +44,7 @@ def verify_email_change(request, token):
         user.save()
         email_change_request.delete()
         messages.success(request, 'Your email has been successfully changed.')
-        return redirect('profile_update')  # Redirect to the profile update page
+        return redirect('list')  # Redirect to the profile update page
     except EmailChangeRequest.DoesNotExist:
         messages.error(request, 'Invalid verification token. Please contact support.')
         return redirect('profile_update')  # Redirect to the profile
