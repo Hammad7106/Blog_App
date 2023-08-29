@@ -17,7 +17,7 @@ def Signin(request):
 
         # Check if user is restricted and restriction duration has passed
         if 'restriction_start_timestamp' in request.session:
-            restriction_duration = timedelta(minutes=1)  # Adjust as needed
+            restriction_duration = timedelta(minutes=1)
             restriction_start_timestamp = request.session['restriction_start_timestamp']
             restriction_end_timestamp = restriction_start_timestamp + restriction_duration.total_seconds()
             current_timestamp = datetime.now().timestamp()

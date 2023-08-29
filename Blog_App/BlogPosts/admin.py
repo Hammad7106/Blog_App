@@ -3,7 +3,7 @@ from .models import Post,Comments,Like,Report,Suggestion
 # Register your models here.
 
 from django.contrib import admin
-from .models import  UserProfile,Post, Comments, Like, Report, Suggestion,CommentLike,SuggestionReply
+from .models import  UserProfile,Post, Comments, Like, Report, Suggestion,CommentLike,SuggestionReply,EmailChangeRequest
 
 @admin.register(UserProfile)
 class BlogUser(admin.ModelAdmin):
@@ -39,4 +39,8 @@ class SuggestionAdmin(admin.ModelAdmin):
 
 @admin.register(SuggestionReply)
 class ReplySuggestion(admin.ModelAdmin):
-    list_display = ('suggestion','user','reply_text')
+    list_display = ('suggestion','user','reply_text')\
+
+@admin.register(EmailChangeRequest)
+class Change_Email(admin.ModelAdmin):
+    list_display = ('user','new_email','token','created_at')

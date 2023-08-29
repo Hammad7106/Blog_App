@@ -85,6 +85,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Blog_App.wsgi.application'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Use SMTP backend
+EMAIL_HOST = 'smtp.gmail.com'  # Replace with your SMTP server's host
+EMAIL_PORT = 587  # Replace with the port number your SMTP server uses
+EMAIL_USE_TLS = True  # Use TLS encryption
+EMAIL_HOST_USER = 'hammadmubeen430@gmail.com'  # Replace with your email address
+EMAIL_HOST_PASSWORD = 'intyiglexlduqper'  # Replace with your email password
+
+
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

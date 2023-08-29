@@ -5,7 +5,7 @@ from froala_editor.fields import FroalaField
 from ckeditor.fields import RichTextField
 
 # Create your models here.
-
+import uuid
 class UserProfile(models.Model):
     class UserRoleEnum(Enum):
         ADMIN = 'admin'
@@ -75,3 +75,9 @@ class SuggestionReply(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     reply_text = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
+class EmailChangeRequest(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    new_email = models.EmailField()
+    token = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
