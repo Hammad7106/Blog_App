@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/add_comments.css' %}">
+    <title>Comments</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="comment-form">
+        <h2>Add Your Comments Here</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="{{ form.comment_content.id_for_label }}">Your Comment:</label>
+            {{ form.description }}
+
+            <label for="{{ form.attachment.id_for_label }}">Attachment (if any):</label>
+            {{ form.attachment }}
+
+            <button type="submit">Add Comment</button>
+        </form>
+    </div>
+</body>
+</html>

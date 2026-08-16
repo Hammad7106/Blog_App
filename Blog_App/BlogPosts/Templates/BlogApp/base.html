@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<style>
+    /* Add this CSS to your stylesheet or <style> tag */
+.welcome-message {
+
+    color: black; /* White text color */
+    font-style:italic;
+    padding: 20px 10px; /* Add some padding around the text */
+    font-size: 21px; /* Adjust font size as needed */
+
+}
+
+</style>
+
+
+</head>
+<body>
+<div class="container mt-4">
+
+            <!-- Navigation bar content here (from base.html) -->
+
+<nav class="navbar navbar-expand-lg bg-light ">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+          <a class="nav-link" href="{% url 'profile_update' %}">Edit Profile</a>
+        </li>
+          {% if user.is_authenticated %}
+
+          <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+        </li>
+          {%else%}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'login' %}">Login</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'Register' %}">SignUp</a>
+        </li>
+          {%endif%}
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'post' %}">Create Blog</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'list' %}">Blog List</a>
+        </li>
+
+          <li class="nav-item">
+                    <span class="navbar-text welcome-message ml-auto"">Welcome {{ user.username }}</span>
+          </li>
+
+    </div>
+  </div>
+</nav>
+
+   <div>
+       <div class="container mt-5">
+        {% block content %}
+
+     <div class="container mt-4">
+
+        <h2>Welcome to the Blog App</h2>
+        <p>
+            This is a simple user registration and post creation application built with Django and Bootstrap.
+            You can sign up, log in, create posts, and view the list of all user posts.
+            You can Perform CRUD Operation on this
+            The navigation menu above provides links to access different features.
+        </p>
+
+    </div>
+        {% endblock %}
+       </div>
+    </div>
+
+
+</body>
+</html>
+
+
+

@@ -1,0 +1,38 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Profile</title>
+    <link rel="stylesheet" href="{% static 'css/profile_update.css' %}">
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h2>Update Your Profile</h2>
+<!--    <form method="post">-->
+<!--    {% csrf_token %}-->
+<!--    {{ userprofileupdate.as_p }}-->
+<!--      &lt;!&ndash; Display token field &ndash;&gt;-->
+<!--    <button type="submit">Update Profile and Confirm Email</button>-->
+<!--  </form>-->
+<form method="post">
+    {% csrf_token %}
+    {{ userprofileupdate.as_p }}
+
+    <!-- Additional Fields for Email Change Verification -->
+    <div>
+      <label for="id_new_email">New Email:</label>
+      {{ userprofileupdate.new_email }}
+    </div>
+
+    <button type="submit">Update Profile and Confirm Email</button>
+  </form>
+    </div>
+</body>
+</html>
